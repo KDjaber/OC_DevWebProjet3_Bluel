@@ -22,6 +22,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	background-color: #FFFEF8;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -94,10 +95,14 @@ nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
+nav a {
+	text-decoration: none;
+}
 
 li:hover {
 	color: #B1663C;
 }
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -123,7 +128,6 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
 .gallery {
 	width: 100%;
@@ -135,11 +139,34 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
+.gallery-filters {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin: 4em 0;
+}
+
+.gallery-filters button {
+	background-color: transparent;
+	color: #1D6154;
+	padding: 8px 19px;
+	font-family: 'Syne';
+	font-size: 16px;
+	border: solid 1px #1D6154;
+	border-radius: 50px;
+}
+
+.gallery-filters button:hover,
+.gallery-filters button:active {
+	background-color: #1D6154;
+	color: white;
+}
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -183,6 +210,6 @@ input[type="submit"]{
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: 2em;
 }
 
