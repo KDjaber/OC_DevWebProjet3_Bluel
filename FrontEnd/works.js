@@ -22,7 +22,7 @@ displayGallery()
 function displayWorks(categoriesID = null) {
     const worksGallery = document.querySelector(".gallery");
     worksGallery.innerHTML = ""
-    console.log(categoriesID)
+
     let works = allWorks
     if (categoriesID) {
         works = allWorks.filter((work)=> {
@@ -33,19 +33,19 @@ function displayWorks(categoriesID = null) {
     
     for (let i = 0; i < works.length; i++) {
 
-        const project = works[i];
+        const project = works[i]
         
         
-        const worksProject = document.createElement("figure");
-        worksProject.dataset.id = project.id;
-        const projectImage = document.createElement("img");
-        projectImage.src = project.imageUrl;
-        const projectCaption = document.createElement("figcaption");
-        projectCaption.innerText = project.title;
+        const worksProject = document.createElement("figure")
+        worksProject.dataset.id = project.id
+        const projectImage = document.createElement("img")
+        projectImage.src = project.imageUrl
+        const projectCaption = document.createElement("figcaption")
+        projectCaption.innerText = project.title
 
-        worksGallery.appendChild(worksProject);
-        worksProject.appendChild(projectImage);
-        worksProject.appendChild(projectCaption);
+        worksGallery.appendChild(worksProject)
+        worksProject.appendChild(projectImage)
+        worksProject.appendChild(projectCaption)
 
     }
 }
@@ -54,8 +54,8 @@ async function displayCategories() {
     try {
         const response = await fetch(apiUrl+"categories")
         categories = await response.json()
-        let btn = document.createElement("button");
-        btn.innerText = "Tous";
+        let btn = document.createElement("button")
+        btn.innerText = "Tous"
         btnContainer.appendChild(btn)
         btn.addEventListener("click", () => {
             displayWorks()
@@ -75,3 +75,25 @@ async function displayCategories() {
 
 
 displayCategories()
+
+const loginNavLink = document.getElementById("login-nav-link")
+
+const userToken = window.localStorage.getItem("token")
+if (userToken === null) {
+    loginNavLink.innerText = "login"
+} else {
+    loginNavLink.innerText = "logout"
+    loginNavLink.setAttribute("href", "#")
+    loginNavLink.addEventListener('click', () => {
+        window.localStorage.removeItem("token")
+        window.location.reload()
+    })
+
+    document.getElementById("editing-banner").classList.remove('hidden')
+
+    const modifyProjectsBtn = document.getElementById("modify-projects")
+    modifyProjectsBtn.classList.remove('hidden')
+    modifyProjectsBtn.addEventListener('click', () => {
+        document.getElementById("modifyprojects-modal").classList.remove('hidden')
+    })
+}
