@@ -180,6 +180,34 @@ li:hover {
     padding: 20px;
     background-color: white;
 }
+ 
+#modal-works {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	max-width: 450px;
+}
+
+#modal-works figure {
+	width: 18%;
+	position: relative;
+}
+
+#modal-works figure img {
+	width: 80px;
+	height: auto;
+	margin-bottom: 10px; 
+}
+
+#modal-works figure i {
+	position: absolute;
+	top: 5px;
+    right: 10px;
+    color: white;
+    background-color: black;
+    padding: 5px;
+    border-radius: 3px;
+}
 
 h3 {
     font-size: 2em;

@@ -95,5 +95,24 @@ if (userToken === null) {
     modifyProjectsBtn.classList.remove('hidden')
     modifyProjectsBtn.addEventListener('click', () => {
         document.getElementById("modifyprojects-modal").classList.remove('hidden')
+        displayWorksInGallery()
     })
+}
+
+function displayWorksInGallery() {
+    let div = document.getElementById("modal-works")
+    console.log(div)
+    allWorks.forEach(element => {
+        let figure = document.createElement("figure")
+        let img = document.createElement("img")
+        let i = document.createElement("i")
+        i.setAttribute("class", "fa-solid fa-trash-can")
+        img.src = element.imageUrl
+        figure.appendChild(img)
+        figure.appendChild(i)
+        div.appendChild(figure)
+        i.addEventListener('click', () => {
+            console.log("id à supprimer", element.id)
+        })
+    });
 }

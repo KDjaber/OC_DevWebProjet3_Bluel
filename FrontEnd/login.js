@@ -14,6 +14,7 @@ async function userAuth(event) {
         password: userPasswordElement.value
     }
     console.log('loginData', loginData)
+    
 //Post values in api & await response
     const loginResponse = await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
@@ -28,7 +29,7 @@ async function userAuth(event) {
         window.localStorage.setItem("token", loginResult.token);
         window.location.href = "index.html"
     } else if (loginResponse.status === 401) {
-        alert("Not Authorized")
+        alert("Identifiant ou mot de passe incorrects")
     } else if (loginResponse.status === 404) {
         alert(loginResult.message)
     }
