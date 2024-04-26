@@ -50,6 +50,7 @@ function displayWorks(categoriesID = null) {
     }
 }
 
+//Different categories available + filtering works
 async function displayCategories() {
     try {
         const response = await fetch(apiUrl+"categories")
@@ -76,8 +77,45 @@ async function displayCategories() {
 
 displayCategories()
 
-const loginNavLink = document.getElementById("login-nav-link")
+//Definition of functions used for the modal
+function displayWorksInGallery() {
+    let div = document.getElementById("modal-works")
+    div.innerHTML = ""
+    allWorks.forEach(element => {
+        let figure = document.createElement("figure")
+        let img = document.createElement("img")
+        let i = document.createElement("i")
+        i.setAttribute("class", "fa-solid fa-trash-can")
+        img.src = element.imageUrl
+        figure.appendChild(img)
+        figure.appendChild(i)
+        div.appendChild(figure)
+        i.addEventListener('click', () => {
+            console.log("id à supprimer", element.id)
+        })
+    });
+}
 
+const loginNavLink = document.getElementById("login-nav-link")
+const modalContainer = document.getElementById("modifyprojects-modal")
+
+function showModal() {
+    modalContainer.classList.remove('hidden')
+}
+function hideModal() {
+    modalContainer.classList.add('hidden')
+}
+function showModalGallery() {
+    document.getElementById("modal-gallery").classList.remove('hidden')
+    document.getElementById("modal-addphoto").classList.add('hidden')
+    displayWorksInGallery()
+}
+function showModalAddPhoto() {
+    document.getElementById("modal-gallery").classList.add('hidden')
+    document.getElementById("modal-addphoto").classList.remove('hidden')
+}
+
+// Homepage change after login + Display/hiding of modal
 const userToken = window.localStorage.getItem("token")
 if (userToken === null) {
     loginNavLink.innerText = "login"
@@ -94,25 +132,23 @@ if (userToken === null) {
     const modifyProjectsBtn = document.getElementById("modify-projects")
     modifyProjectsBtn.classList.remove('hidden')
     modifyProjectsBtn.addEventListener('click', () => {
-        document.getElementById("modifyprojects-modal").classList.remove('hidden')
-        displayWorksInGallery()
+        showModal()
+        showModalGallery()
     })
-}
 
-function displayWorksInGallery() {
-    let div = document.getElementById("modal-works")
-    console.log(div)
-    allWorks.forEach(element => {
-        let figure = document.createElement("figure")
-        let img = document.createElement("img")
-        let i = document.createElement("i")
-        i.setAttribute("class", "fa-solid fa-trash-can")
-        img.src = element.imageUrl
-        figure.appendChild(img)
-        figure.appendChild(i)
-        div.appendChild(figure)
-        i.addEventListener('click', () => {
-            console.log("id à supprimer", element.id)
-        })
-    });
+    document.getElementById("add-photo").addEventListener('click', () => {
+        showModalAddPhoto()
+    })
+
+    const closeModal = document.getElementById("modal-xmark")
+    closeModal.addEventListener('click', () => {
+        hideModal()
+    })
+
+    modalContainer.addEventListener('click', function(event) {
+    const modal = document.getElementById('modal-wrapper')
+        if (event.target !== modal && !modal.contains(event.target)) {
+            hideModal()
+        }
+    }, false)
 }

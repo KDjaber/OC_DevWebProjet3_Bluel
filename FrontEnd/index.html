@@ -24,7 +24,7 @@
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<ul>
 			<li><a href="index.html">projets</a></li>
-			<li>contact</li>
+			<li><a href=#contact>contact</a></li>
 			<li><a href="login.html" id="login-nav-link"></a></li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
@@ -50,9 +50,22 @@
 
 		<aside id="modifyprojects-modal" class="modal hidden">
 			<div class="modal-wrapper" id="modal-wrapper">
-				<h3 id="modaltitle">Galerie photo</h3>
-				<div id="modal-works"></div>
-				<button id="add-photo">Ajouter une photo</button>
+				<div class="modal-nav" id="modal-nav">
+					<button id="modal-xmark"><i class="fa-solid fa-xmark"></i></button>
+					<button id="modal-goback"><i class="fa-solid fa-arrow-left"></i></button>
+				</div>
+				<div id="modal-gallery">
+					<h3 id="modaltitle">Galerie photo</h3>
+					<div id="modal-works"></div>
+					<hr>
+					<button id="add-photo">Ajouter une photo</button>
+				</div>
+				<div id="modal-addphoto">
+					<h3 id="modaltitle">Ajout photo</h3>
+					<div id="modal-addphotoform"></div>
+					<hr>
+					<button id="add-photo">Valider</button>
+				</div>
 			</div>
 		</aside>
 
