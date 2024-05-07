@@ -31,7 +31,6 @@ function displayWorks(categoriesID = null) {
         works = allWorks.filter((work)=> {
             return work.categoryId == categoriesID
         })
-        console.log(works)
     }
     
     for (let i = 0; i < works.length; i++) {
@@ -74,6 +73,8 @@ function displayCategories() {
         console.error("fetch error", e)
     }
 }
+
+displayCategories()
 
 //Definition of functions used for the modal
 
@@ -173,7 +174,8 @@ function resetForm() {
         document.getElementById("form-image-preview").remove()
         document.getElementById("photo-icons").style.display = "flex"
         document.getElementById("title").value=""
-        document.getElementById("category").value=""
+        document.getElementById("select-category").value=""
+        document.getElementById("select-category").innerHTML=""
         document.getElementById("addphoto-input").value=""
     }
 }
@@ -200,7 +202,6 @@ const modalContainer = document.getElementById("modifyprojects-modal")
 const userToken = window.localStorage.getItem("token")
 if (userToken === null) {
     loginNavLink.innerText = "login"
-    displayCategories()
 } else {
     loginNavLink.innerText = "logout"
     loginNavLink.setAttribute("href", "#")
@@ -219,8 +220,8 @@ if (userToken === null) {
     })
 
     document.getElementById("add-photo").addEventListener('click', () => {
-        displayAddPhotoPage()
         resetForm()
+        displayAddPhotoPage()
     })
 
     document.getElementById("addphoto-input").addEventListener("change", () => {
