@@ -4,6 +4,17 @@ const apiUrl = 'http://localhost:5678/api/';
 // GET request to fetch api/works
 let allWorks
 let btnContainer = document.querySelector(".gallery-filters")
+let addPhotoInput = document.getElementById("addphoto-input")
+let photoTitle = document.getElementById("title")
+let photoCategory = document.getElementById("select-category")
+let modalWorks = document.getElementById("modal-works")
+let modalGoBack = document.getElementById("modal-goback")
+let modalTitle = document.getElementById("modaltitle")
+let modalChange = document.getElementById("modal-change-gallery")
+let addPhotoBtn = document.getElementById("add-photo")
+let acceptChangesBtn = document.getElementById("accept-changes")
+let imagePreview 
+let photoIcons = document.getElementById("photo-icons")
 
 const categoriesResponse = await fetch(apiUrl+"categories")
 const categories = await categoriesResponse.json()
@@ -74,8 +85,6 @@ function displayCategories() {
     }
 }
 
-displayCategories()
-
 //Definition of functions used for the modal
 
 function showModal() {
@@ -102,10 +111,7 @@ async function deleteWork(id) {
 async function addWork() {
     const formElement = document.getElementById("addphoto-form")
     const formData = new FormData(formElement)
-    let photo = document.getElementById("addphoto-input")
-    let title = document.getElementById("title")
-    let category = document.getElementById("select-category")
-    if (photo.value == "" || title.value == "" || category.value == "") {
+    if (addPhotoInput.value == "" || photoTitle.value == "" || photoCategory.value == "") {
         alert("Veuillez remplir tous les champs.")
         return
     } 
@@ -121,8 +127,7 @@ async function addWork() {
 }
 
 function displayWorksInGallery() {
-    let div = document.getElementById("modal-works")
-    div.innerHTML = ""
+    modalWorks.innerHTML = ""
     allWorks.forEach(element => {
         let figure = document.createElement("figure")
         let img = document.createElement("img")
@@ -132,7 +137,7 @@ function displayWorksInGallery() {
         figure.setAttribute("id", element.id)
         figure.appendChild(img)
         figure.appendChild(i)
-        div.appendChild(figure)
+        modalWorks.appendChild(figure)
         i.addEventListener('click', () => {
             deleteWork(element.id)
         })
@@ -142,58 +147,55 @@ function displayWorksInGallery() {
 
 function addPhotoCategories() {
     for (let i = 0; i < categories.length; i++) {
-        const selector = document.getElementById("select-category")
         const option = document.createElement("option")
         option.setAttribute("value", categories[i].id)
         option.innerText = categories[i].name
-        selector.appendChild(option)
+        photoCategory.appendChild(option)
     }
 }
 
 function displayModalHomepage() {
-    document.getElementById("modal-goback").classList.add("hidden")
-    document.getElementById("modaltitle").innerHTML = "Galerie photo"
+    modalGoBack.classList.add("hidden")
+    modalTitle.innerHTML = "Galerie photo"
     displayWorksInGallery()
-    document.getElementById("modal-change-gallery").classList.add("hidden")
-    document.getElementById("add-photo").classList.remove("hidden")
-    document.getElementById("accept-changes").classList.add("hidden")
+    modalChange.classList.add("hidden")
+    addPhotoBtn.classList.remove("hidden")
+    acceptChangesBtn.classList.add("hidden")
 }
 
 function displayAddPhotoPage() {
-    document.getElementById("modal-goback").classList.remove("hidden")
-    document.getElementById("modaltitle").innerHTML = "Ajout photo"
-    document.getElementById("modal-works").innerHTML = ""
-    document.getElementById("modal-change-gallery").classList.remove("hidden")
-    document.getElementById("add-photo").classList.add("hidden")
-    document.getElementById("accept-changes").classList.remove("hidden")
+    modalGoBack.classList.remove("hidden")
+    modalTitle.innerHTML = "Ajout photo"
+    modalWorks.innerHTML = ""
+    modalChange.classList.remove("hidden")
+    addPhotoBtn.classList.add("hidden")
+    acceptChangesBtn.classList.remove("hidden")
     addPhotoCategories()
 }
 
 function resetForm() {
-    if (document.getElementById("form-image-preview") !== null) {
-        document.getElementById("form-image-preview").remove()
-        document.getElementById("photo-icons").style.display = "flex"
-        document.getElementById("title").value=""
-        document.getElementById("select-category").value=""
-        document.getElementById("select-category").innerHTML=""
-        document.getElementById("addphoto-input").value=""
+    if (imagePreview) {
+        imagePreview.remove()
+        photoIcons.style.display = "flex"
+        photoTitle.value=""
+        photoCategory.value=""
+        photoCategory.innerHTML=""
+        photoCategory = document.getElementById("select-category")
+        addPhotoInput.value=""
     }
 }
 
 function verifyForm() {
-    let photo = document.getElementById("addphoto-input")
-    let title = document.getElementById("title")
-    let category = document.getElementById("select-category")
-    if (photo.value !== "" && title.value !== "" && category.value !== "") {
-        document.getElementById("accept-changes").classList.add("accept-changes-ok")
+    if (addPhotoInput.value !== "" && photoTitle.value !== "" && photoCategory.value !== "") {
+        acceptChangesBtn.classList.add("accept-changes-ok")
     } else {
-        document.getElementById("accept-changes").classList.remove("accept-changes-ok")
+        acceptChangesBtn.classList.remove("accept-changes-ok")
     }
 }
 
-document.getElementById("addphoto-input").addEventListener('change', verifyForm)
-document.getElementById("title").addEventListener('change', verifyForm)
-document.getElementById("select-category").addEventListener('change', verifyForm)
+addPhotoInput.addEventListener('change', verifyForm)
+photoTitle.addEventListener('change', verifyForm)
+photoCategory.addEventListener('change', verifyForm)
 
 const loginNavLink = document.getElementById("login-nav-link")
 const modalContainer = document.getElementById("modifyprojects-modal")
@@ -202,6 +204,7 @@ const modalContainer = document.getElementById("modifyprojects-modal")
 const userToken = window.localStorage.getItem("token")
 if (userToken === null) {
     loginNavLink.innerText = "login"
+    displayCategories()
 } else {
     loginNavLink.innerText = "logout"
     loginNavLink.setAttribute("href", "#")
@@ -219,29 +222,28 @@ if (userToken === null) {
         displayModalHomepage()
     })
 
-    document.getElementById("add-photo").addEventListener('click', () => {
+    addPhotoBtn.addEventListener('click', () => {
         resetForm()
         displayAddPhotoPage()
     })
 
-    document.getElementById("addphoto-input").addEventListener("change", () => {
-        let photoInput = document.getElementById("addphoto-input")
+    addPhotoInput.addEventListener("change", () => {
         let maxPhotoSize = 4*1024*1024;
-        if (photoInput.files[0].size > maxPhotoSize) {
+        if (addPhotoInput.files[0].size > maxPhotoSize) {
             alert("Image trop volumineuse.")
         } else {
-            let imagePreview = document.createElement("img")
+            imagePreview = document.createElement("img")
             imagePreview.setAttribute("id", "form-image-preview")
-            imagePreview.src = URL.createObjectURL(photoInput.files[0])
+            imagePreview.src = URL.createObjectURL(addPhotoInput.files[0])
             const photoPreviewContainer = document.getElementById("addphoto-preview")
             photoPreviewContainer.appendChild(imagePreview)
-            document.getElementById("photo-icons").style.display = "none"
+            photoIcons.style.display = "none"
         }
     })
 
-    document.getElementById("accept-changes").addEventListener("click", addWork)
+    acceptChangesBtn.addEventListener("click", addWork)
 
-    document.getElementById("modal-goback").addEventListener('click', () => {
+    modalGoBack.addEventListener('click', () => {
         displayModalHomepage()
     })
 

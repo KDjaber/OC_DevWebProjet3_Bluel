@@ -1,14 +1,14 @@
 //Adds event listener to login form in html
 function setUpAuthListener() {
-    const formAuth = document.querySelector(".form_auth");
-    formAuth.addEventListener("submit", userAuth);
+    const formAuth = document.querySelector(".form_auth")
+    formAuth.addEventListener("submit", userAuth)
 }
 
 //Adds userAuth event to get form values
 async function userAuth(event) {
-    event.preventDefault();
-    const userEmailElement = document.querySelector("#login_email");
-    const userPasswordElement = document.querySelector("#login_password");
+    event.preventDefault()
+    const userEmailElement = document.querySelector("#login_email")
+    const userPasswordElement = document.querySelector("#login_password")
     const loginData = {
         email: userEmailElement.value,
         password: userPasswordElement.value
