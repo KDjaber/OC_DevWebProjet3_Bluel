@@ -29,7 +29,7 @@ async function userAuth(event) {
         window.localStorage.setItem("token", loginResult.token);
         window.location.href = "index.html"
     } else if (loginResponse.status === 401) {
-        alert("Identifiant ou mot de passe incorrects")
+        alert("Identifiant ou mot de passe incorrects.")
     } else if (loginResponse.status === 404) {
         alert(loginResult.message)
     }

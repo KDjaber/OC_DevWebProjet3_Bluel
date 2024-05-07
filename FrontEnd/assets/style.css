@@ -57,6 +57,7 @@ body {
 	margin: auto;
 	font-family: 'Work Sans' ;
 	font-size: 14px;
+	background-color: #FFFEF8;
 }
 
 .editing-banner {
@@ -70,7 +71,7 @@ body {
 }
 
 section {
-	margin: 50px 0
+	margin: 90px 0
 }
 
 h1{
@@ -99,7 +100,7 @@ h2{
 header nav {
 	display: flex;
 	justify-content: space-between;
-	margin: 30px 0
+	margin: 50px 0;
 }
 
 nav ul {
@@ -109,11 +110,27 @@ nav ul {
 
 }
 nav li {
-	padding: 0 10px;
+	padding: 0 20px;
 	font-size: 1.2em;
 }
+
 nav a {
 	text-decoration: none;
+}
+
+nav a:visited {
+	color: black;
+}
+
+nav a:hover,
+a:active,
+a:focus {
+	font-weight: bold;
+	color: black;
+}
+
+nav img {
+	width: 20px;
 }
 
 li:hover {
@@ -247,21 +264,82 @@ li:hover {
     border-radius: 3px;
 }
 
+.addphoto-frame {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 8px;
+	background-color: #E8F1F6;
+	padding: 20px 140px;
+	border-radius: 5px;
+}
+
+.addphoto-frame i {
+	font-size: 60px;
+	color: #B9C5CC;
+}
+
+#addphoto-button {
+	padding: 10px 40px;
+	border-radius: 50px;
+	background-color: #CBD6DC;
+	color: #306685;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.addphoto-frame p {
+	font-size: 10px;
+}
+
+#addphoto-form {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+}
+
+#addphoto-form input, select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#addphoto-form label {
+	margin: 1em 0 1em 0;
+}
+
+#addphoto-form textarea {
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#form-image-preview {
+	height: 50px;
+}
+
 h3 {
     font-size: 2em;
     margin : 1em;
 }
 
-#add-photo {
+#add-photo,
+#accept-changes {
     font-family: 'Syne';
 	font-weight: 700;
 	color: white;
-	background-color: #1D6154;
-	margin : 2em auto;
+	background-color: grey;
+	margin : 30px;
     padding: 10px 40px;
 	text-align: center;
 	border-radius: 60px;
     border: none;
+} 
+
+#add-photo,
+#accept-changes.accept-changes-ok {
+	color: white;
+	background-color: #1D6154;
 }
 
 .gallery {
@@ -274,6 +352,10 @@ h3 {
 
 .gallery img {
 	width: 100%;
+}
+
+.gallery figcaption {
+	margin: 5px 0 0 0;
 }
 
 .gallery-filters {

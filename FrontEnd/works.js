@@ -3,13 +3,16 @@ const apiUrl = 'http://localhost:5678/api/';
 
 // GET request to fetch api/works
 let allWorks
-let categories
 let btnContainer = document.querySelector(".gallery-filters")
+
+const categoriesResponse = await fetch(apiUrl+"categories")
+const categories = await categoriesResponse.json()
 
 async function displayGallery() {
     try {
         const response = await fetch(apiUrl+"works")
         allWorks = await response.json()
+        console.log('allWokrs', allWorks)
         displayWorks();
     } catch (e) {
         console.error("fetch error", e)
@@ -37,7 +40,7 @@ function displayWorks(categoriesID = null) {
         
         
         const worksProject = document.createElement("figure")
-        worksProject.dataset.id = project.id
+        worksProject.id = project.id
         const projectImage = document.createElement("img")
         projectImage.src = project.imageUrl
         const projectCaption = document.createElement("figcaption")
@@ -51,10 +54,8 @@ function displayWorks(categoriesID = null) {
 }
 
 //Different categories available + filtering works
-async function displayCategories() {
+function displayCategories() {
     try {
-        const response = await fetch(apiUrl+"categories")
-        categories = await response.json()
         let btn = document.createElement("button")
         btn.innerText = "Tous"
         btnContainer.appendChild(btn)
@@ -74,10 +75,50 @@ async function displayCategories() {
     }
 }
 
-
-displayCategories()
-
 //Definition of functions used for the modal
+
+function showModal() {
+    modalContainer.classList.remove('hidden')
+}
+function hideModal() {
+    modalContainer.classList.add('hidden')
+}
+
+async function deleteWork(id) {
+    let confirmation = confirm("Voulez-vous supprimer ce projet ?")
+    if (confirmation == true) {
+        await fetch(`${apiUrl}works/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${userToken}`
+            }
+        })
+        await displayGallery()
+        displayModalHomepage()
+    }
+}
+
+async function addWork() {
+    const formElement = document.getElementById("addphoto-form")
+    const formData = new FormData(formElement)
+    let photo = document.getElementById("addphoto-input")
+    let title = document.getElementById("title")
+    let category = document.getElementById("select-category")
+    if (photo.value == "" || title.value == "" || category.value == "") {
+        alert("Veuillez remplir tous les champs.")
+        return
+    } 
+    await fetch(`${apiUrl}works`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${userToken}`
+        },
+        body: formData
+    })
+    await displayGallery()
+    displayModalHomepage()
+}
+
 function displayWorksInGallery() {
     let div = document.getElementById("modal-works")
     div.innerHTML = ""
@@ -87,38 +128,79 @@ function displayWorksInGallery() {
         let i = document.createElement("i")
         i.setAttribute("class", "fa-solid fa-trash-can")
         img.src = element.imageUrl
+        figure.setAttribute("id", element.id)
         figure.appendChild(img)
         figure.appendChild(i)
         div.appendChild(figure)
         i.addEventListener('click', () => {
-            console.log("id à supprimer", element.id)
+            deleteWork(element.id)
         })
     });
+
 }
+
+function addPhotoCategories() {
+    for (let i = 0; i < categories.length; i++) {
+        const selector = document.getElementById("select-category")
+        const option = document.createElement("option")
+        option.setAttribute("value", categories[i].id)
+        option.innerText = categories[i].name
+        selector.appendChild(option)
+    }
+}
+
+function displayModalHomepage() {
+    document.getElementById("modal-goback").classList.add("hidden")
+    document.getElementById("modaltitle").innerHTML = "Galerie photo"
+    displayWorksInGallery()
+    document.getElementById("modal-change-gallery").classList.add("hidden")
+    document.getElementById("add-photo").classList.remove("hidden")
+    document.getElementById("accept-changes").classList.add("hidden")
+}
+
+function displayAddPhotoPage() {
+    document.getElementById("modal-goback").classList.remove("hidden")
+    document.getElementById("modaltitle").innerHTML = "Ajout photo"
+    document.getElementById("modal-works").innerHTML = ""
+    document.getElementById("modal-change-gallery").classList.remove("hidden")
+    document.getElementById("add-photo").classList.add("hidden")
+    document.getElementById("accept-changes").classList.remove("hidden")
+    addPhotoCategories()
+}
+
+function resetForm() {
+    if (document.getElementById("form-image-preview") !== null) {
+        document.getElementById("form-image-preview").remove()
+        document.getElementById("photo-icons").style.display = "flex"
+        document.getElementById("title").value=""
+        document.getElementById("category").value=""
+        document.getElementById("addphoto-input").value=""
+    }
+}
+
+function verifyForm() {
+    let photo = document.getElementById("addphoto-input")
+    let title = document.getElementById("title")
+    let category = document.getElementById("select-category")
+    if (photo.value !== "" && title.value !== "" && category.value !== "") {
+        document.getElementById("accept-changes").classList.add("accept-changes-ok")
+    } else {
+        document.getElementById("accept-changes").classList.remove("accept-changes-ok")
+    }
+}
+
+document.getElementById("addphoto-input").addEventListener('change', verifyForm)
+document.getElementById("title").addEventListener('change', verifyForm)
+document.getElementById("select-category").addEventListener('change', verifyForm)
 
 const loginNavLink = document.getElementById("login-nav-link")
 const modalContainer = document.getElementById("modifyprojects-modal")
-
-function showModal() {
-    modalContainer.classList.remove('hidden')
-}
-function hideModal() {
-    modalContainer.classList.add('hidden')
-}
-function showModalGallery() {
-    document.getElementById("modal-gallery").classList.remove('hidden')
-    document.getElementById("modal-addphoto").classList.add('hidden')
-    displayWorksInGallery()
-}
-function showModalAddPhoto() {
-    document.getElementById("modal-gallery").classList.add('hidden')
-    document.getElementById("modal-addphoto").classList.remove('hidden')
-}
 
 // Homepage change after login + Display/hiding of modal
 const userToken = window.localStorage.getItem("token")
 if (userToken === null) {
     loginNavLink.innerText = "login"
+    displayCategories()
 } else {
     loginNavLink.innerText = "logout"
     loginNavLink.setAttribute("href", "#")
@@ -133,11 +215,33 @@ if (userToken === null) {
     modifyProjectsBtn.classList.remove('hidden')
     modifyProjectsBtn.addEventListener('click', () => {
         showModal()
-        showModalGallery()
+        displayModalHomepage()
     })
 
     document.getElementById("add-photo").addEventListener('click', () => {
-        showModalAddPhoto()
+        displayAddPhotoPage()
+        resetForm()
+    })
+
+    document.getElementById("addphoto-input").addEventListener("change", () => {
+        let photoInput = document.getElementById("addphoto-input")
+        let maxPhotoSize = 4*1024*1024;
+        if (photoInput.files[0].size > maxPhotoSize) {
+            alert("Image trop volumineuse.")
+        } else {
+            let imagePreview = document.createElement("img")
+            imagePreview.setAttribute("id", "form-image-preview")
+            imagePreview.src = URL.createObjectURL(photoInput.files[0])
+            const photoPreviewContainer = document.getElementById("addphoto-preview")
+            photoPreviewContainer.appendChild(imagePreview)
+            document.getElementById("photo-icons").style.display = "none"
+        }
+    })
+
+    document.getElementById("accept-changes").addEventListener("click", addWork)
+
+    document.getElementById("modal-goback").addEventListener('click', () => {
+        displayModalHomepage()
     })
 
     const closeModal = document.getElementById("modal-xmark")

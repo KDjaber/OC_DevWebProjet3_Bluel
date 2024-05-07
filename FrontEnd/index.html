@@ -52,19 +52,31 @@
 			<div class="modal-wrapper" id="modal-wrapper">
 				<div class="modal-nav" id="modal-nav">
 					<button id="modal-xmark"><i class="fa-solid fa-xmark"></i></button>
-					<button id="modal-goback"><i class="fa-solid fa-arrow-left"></i></button>
+					<button id="modal-goback" class="hidden"><i class="fa-solid fa-arrow-left"></i></button>
 				</div>
 				<div id="modal-gallery">
-					<h3 id="modaltitle">Galerie photo</h3>
-					<div id="modal-works"></div>
+					<h3 id="modaltitle"></h3>
+					<div id="modal-works" class=""></div>
+					<div id="modal-change-gallery" class="">
+						<form id="addphoto-form">
+							<div class="addphoto-frame">
+								<div id="photo-icons">
+									<i class="fa-regular fa-image"></i>
+									<label for="addphoto-input" id="addphoto-button">+ Ajouter photo</label>
+									<input type="file" id="addphoto-input" name="image" accept=".jpg, .jpeg, .png" multiple="false" class="hidden">
+									<p>jpg, png : 4mo max</p>
+								</div>
+								<div id="addphoto-preview"></div>
+							</div>
+							<label for="title">Titre</label>
+							<input type="text" name="title" id="title">
+							<label for="select-category">Catégorie</label>
+							<select name="category" id="select-category"></select>
+						</form>
+					</div>
 					<hr>
-					<button id="add-photo">Ajouter une photo</button>
-				</div>
-				<div id="modal-addphoto">
-					<h3 id="modaltitle">Ajout photo</h3>
-					<div id="modal-addphotoform"></div>
-					<hr>
-					<button id="add-photo">Valider</button>
+					<button id="add-photo" class="">Ajouter une photo</button>
+					<button id="accept-changes" class="hidden">Valider</button>
 				</div>
 			</div>
 		</aside>
