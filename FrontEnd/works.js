@@ -1,7 +1,7 @@
 // API endpoint for works
 const apiUrl = 'http://localhost:5678/api/';
 
-// GET request to fetch api/works
+// Variables
 let allWorks
 let btnContainer = document.querySelector(".gallery-filters")
 let addPhotoInput = document.getElementById("addphoto-input")
@@ -16,6 +16,7 @@ let acceptChangesBtn = document.getElementById("accept-changes")
 let imagePreview 
 let photoIcons = document.getElementById("photo-icons")
 
+// GET request to fetch api/works
 const categoriesResponse = await fetch(apiUrl+"categories")
 const categories = await categoriesResponse.json()
 
@@ -63,7 +64,7 @@ function displayWorks(categoriesID = null) {
     }
 }
 
-//Different categories available + filtering works
+//Sort/filter with categories
 function displayCategories() {
     try {
         let btn = document.createElement("button")
@@ -85,8 +86,7 @@ function displayCategories() {
     }
 }
 
-//Definition of functions used for the modal
-
+//Functions used for the modal
 function showModal() {
     modalContainer.classList.remove('hidden')
 }
